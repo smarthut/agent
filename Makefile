@@ -1,7 +1,6 @@
 # A Self-Documenting Makefile: http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 
-PACKAGE := github.com/smarthut/megad328/cmd/megad328
-DOCKER_IMAGE := smarthut/megad328
+PACKAGE := github.com/smarthut/agent
 
 GOEXE ?= go
 
@@ -13,8 +12,8 @@ vendor: ## Install deps and sync vendored dependencies
 	@${GOEXE} get -u github.com/golang/dep/cmd/dep
 	@dep ensure
 
-build: vendor ## Build megad328 binary
-	@echo "Building megad328 binary"
+build: vendor ## Build agent binary
+	@echo "Building agent binary"
 	@CGO_ENABLED=0 GOOS=linux ${GOEXE} build -a -installsuffix cgo ${PACKAGE}
 
 test: ## Run tests
