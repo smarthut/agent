@@ -17,11 +17,14 @@ import (
 var dev device.Device
 
 func main() {
-	os.Setenv("DEVICE_HOST", "192.168.1.102")
-	os.Setenv("DEVICE_PASS", "sec")
-	factory, ok := device.Drivers["megad328"]
+	driver, ok := os.LookupEnv("DEVICE_DRIVER")
 	if !ok {
-		fmt.Println("not ok")
+		log.Println("agent: DEVICE_DRIVER is required")
+	}
+
+	factory, ok := device.Drivers[driver]
+	if !ok {
+		log.Fatalf("agent: there are no driver for %s device\n", driver)
 	}
 
 	var err error
