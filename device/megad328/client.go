@@ -62,8 +62,12 @@ func (d *MegaD328) UpdateSockets() error {
 	d.UpdatedAt = time.Now()
 	for i := range d.Sockets {
 		// we don't care about the error, not all values are parsable
-		v, _ := strconv.ParseFloat(vals[i], 64)
-		d.Sockets[i] = v
+		v, err := strconv.ParseFloat(vals[i], 64)
+		if err != nil {
+			d.Sockets[i] = vals[i]
+		} else {
+			d.Sockets[i] = v
+		}
 	}
 
 	return nil

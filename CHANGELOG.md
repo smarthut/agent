@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.1] - 2017-10-07
+### Fixed
+- Parsing logic.
+
 ## [1.0.0] - 2017-10-03
 ### Added
 - Initial release.
