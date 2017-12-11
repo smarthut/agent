@@ -1,10 +1,13 @@
 # Changelog
 
 ## [0.2.0] - 2017-12-11
+### Added
+- caarlos0/env package
+- go-chi/render package
+### Updated
 - Migrated `x-www-form-urlencoded` to `raw json`
+### Removed
 - Removed regexp from URLs, everything is incoded with JSON now
-- Added caarlos0/env package
-- Added go-chi/render package
 
 ## [0.1.1] - 2017-10-07
 ### Fixed
