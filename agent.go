@@ -5,30 +5,26 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
-	"strconv"
 	"time"
 
+	"github.com/caarlos0/env"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/render"
+
 	"github.com/smarthut/agent/device"
 )
 
 var dev device.Device
 
 func main() {
-	driver, ok := os.LookupEnv("DEVICE_DRIVER")
-	if !ok {
-		log.Println("agent: DEVICE_DRIVER is required")
+	var deviceConfig DeviceConfig
+	err := env.Parse(&deviceConfig)
+	if err != nil {
+		fmt.Println(err)
 	}
 
-	factory, ok := device.Drivers[driver]
-	if !ok {
-		log.Fatalf("agent: there are no driver for %s device\n", driver)
-	}
-
-	var err error
-	dev, err = factory()
+	dev, err = device.NewDevice(deviceConfig.Driver, deviceConfig.Host, deviceConfig.Password)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -40,8 +36,9 @@ func main() {
 	r.Use(middleware.Recoverer)
 
 	r.Get("/", apiHandler)
-	r.Get("/{socketID:^[0-9]*$}", socketGetHandler)
-	r.Post("/{socketID:^[0-9]*$}", socketPostHandler)
+
+	r.Get("/socket", socketGetHandler)
+	r.Post("/socket", socketPostHandler)
 
 	http.ListenAndServe(":8080", r)
 }
@@ -66,61 +63,45 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func socketGetHandler(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(chi.URLParam(r, "socketID"))
+	var p device.Payload
+	err := json.NewDecoder(r.Body).Decode(&p)
 	if err != nil {
-		log.Println(err)
-		return
+		fmt.Println(err)
 	}
 
-	if id < 0 || id >= dev.Len() {
+	if p.ID < 0 || p.ID >= dev.Len() {
 		w.Write([]byte("agent: id put of bounds"))
 		return
 	}
 
-	s, err := dev.Get(id)
+	s, err := dev.Get(p.ID)
 	if err != nil {
-		log.Println(nil)
+		log.Println(err)
 	}
 
-	body, err := json.Marshal(s)
-	if err != nil {
-		log.Println("agent: unable to marshal device")
-		return
-	}
-	w.Write(body)
+	render.JSON(w, r, s)
 }
 
 func socketPostHandler(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(chi.URLParam(r, "socketID"))
+	var p device.Payload
+	err := json.NewDecoder(r.Body).Decode(&p)
 	if err != nil {
-		log.Println(err)
-		return
+		fmt.Println(err)
 	}
 
-	if id < 0 || id >= dev.Len() {
+	if p.ID < 0 || p.ID >= dev.Len() {
 		w.Write([]byte("agent: id put of bounds"))
 		return
 	}
 
-	stringValue := r.FormValue("value")
-	value, err := strconv.Atoi(stringValue)
-	if err != nil {
-		log.Printf("agent: unable to set %s to %d", stringValue, id)
-	}
-
-	if err = dev.Set(id, value); err != nil {
+	if err = dev.Set(p.ID, p.Value); err != nil {
 		log.Println(err)
 	}
 
-	s, err := dev.Get(id)
+	s, err := dev.Get(p.ID)
 	if err != nil {
-		log.Println(nil)
+		log.Println(err)
 	}
 
-	body, err := json.Marshal(s)
-	if err != nil {
-		log.Println("agent: unable to marshal device")
-		return
-	}
-	w.Write(body)
+	render.JSON(w, r, s)
 }
