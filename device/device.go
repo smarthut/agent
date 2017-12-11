@@ -1,8 +1,7 @@
 package device
 
 import (
-	"errors"
-	"os"
+	"fmt"
 
 	"github.com/smarthut/agent/device/laurent112"
 	"github.com/smarthut/agent/device/megad328"
@@ -17,35 +16,33 @@ type Device interface {
 }
 
 // Factory ...
-type Factory func() (Device, error)
+type Factory func(host, password string) (Device, error)
 
-// NewMegaD328Device ...
-func NewMegaD328Device() (Device, error) {
-	host, ok := os.LookupEnv("DEVICE_HOST")
-	if !ok {
-		return nil, errors.New("megad328: DEVICE_HOST is required for the MegaD328 connection")
-	}
-
-	pass, ok := os.LookupEnv("DEVICE_PASS")
-	if !ok {
-		return nil, errors.New("megad328: DEVICE_PASS is required for the MegaD328 connection")
-	}
-
-	return megad328.New(host, pass), nil
+func newMegaD328Device(host, password string) (Device, error) {
+	return megad328.New(host, password), nil
 }
 
-// NewLaurent112Device ...
-func NewLaurent112Device() (Device, error) {
-	host, ok := os.LookupEnv("DEVICE_HOST")
+func newLaurent112Device(host, password string) (Device, error) {
+	return laurent112.New(host), nil
+}
+
+// NewDevice ...
+func NewDevice(driver, host, password string) (Device, error) {
+	factory, ok := Drivers[driver]
 	if !ok {
-		return nil, errors.New("laurent112: DEVICE_HOST is required for the MegaD328 connection")
+		return nil, fmt.Errorf("agent: there are no driver for %s device", driver)
 	}
 
-	return laurent112.New(host), nil
+	dev, err := factory(host, password)
+	if err != nil {
+		return nil, err
+	}
+
+	return dev, nil
 }
 
 // Drivers ...
 var Drivers = map[string]Factory{
-	"megad328":   NewMegaD328Device,
-	"laurent112": NewLaurent112Device,
+	"megad328":   newMegaD328Device,
+	"laurent112": newLaurent112Device,
 }
