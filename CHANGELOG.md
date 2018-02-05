@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.0] - 2018-02-05
+### Changed
+- Code refactoring
+
 ## [0.2.0] - 2017-12-11
 ### Added
 - caarlos0/env package
