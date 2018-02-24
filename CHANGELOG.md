@@ -4,6 +4,10 @@
 ### Changed
 - Switched to kelseyhightower/envconfig env parser
 
+## [0.3.1] - 2018-02-23
+### Fixed
+- Typo in env configuration
+
 ## [0.3.0] - 2018-02-05
 ### Changed
 - Code refactoring
