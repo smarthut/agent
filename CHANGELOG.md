@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.4.0] - 2018-02-24
+### Changed
+- Switched to kelseyhightower/envconfig env parser
+
 ## [0.3.0] - 2018-02-05
 ### Changed
 - Code refactoring

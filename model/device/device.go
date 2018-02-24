@@ -4,13 +4,11 @@ import (
 	"fmt"
 	"log"
 	"time"
-
-	"github.com/caarlos0/env"
 )
 
 var (
 	currentDevice Device
-	config        Config
+	pollingTime   time.Duration
 )
 
 // Device provides interface for accessing the device
@@ -37,17 +35,14 @@ func New(driver, host, password string) (Device, error) {
 }
 
 // Create creates the device
-func Create() error {
-	err := env.Parse(&config)
+func Create(c Configuration) error {
+	var err error
+	currentDevice, err = New(c.Device.Driver, c.Device.Host, c.Device.Password)
 	if err != nil {
 		return err
 	}
 
-	currentDevice, err = New(config.Driver, config.Host, config.Password)
-
-	if err != nil {
-		return err
-	}
+	pollingTime = c.Device.PollingTime
 
 	go startPolling()
 
@@ -64,6 +59,6 @@ func startPolling() {
 		if err := currentDevice.UpdateSockets(); err != nil {
 			log.Println(err)
 		}
-		<-time.After(config.PollingTime * time.Second)
+		<-time.After(pollingTime * time.Second)
 	}
 }

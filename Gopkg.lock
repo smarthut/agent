@@ -2,14 +2,11 @@
 
 
 [[projects]]
-  name = "github.com/caarlos0/env"
-  packages = ["."]
-  revision = "7cd7992b3bc86f920394f8de92c13900da1a46b7"
-  version = "v3.2.0"
-
-[[projects]]
   name = "github.com/go-chi/chi"
-  packages = [".","middleware"]
+  packages = [
+    ".",
+    "middleware"
+  ]
   revision = "e83ac2304db3c50cf03d96a2fcd39009d458bc35"
   version = "v3.3.2"
 
@@ -19,9 +16,15 @@
   revision = "9f855fadd4b8cde7773f9ef51f6b2705af239519"
   version = "v1.0.0"
 
+[[projects]]
+  name = "github.com/kelseyhightower/envconfig"
+  packages = ["."]
+  revision = "f611eb38b3875cc3bd991ca91c51d06446afa14c"
+  version = "v1.3.0"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "90645cab0478a47ff4760fe11145ccdd5747aaacba4121bf49c91345f4f95dfe"
+  inputs-digest = "e4bbd8844e0859e2a29998eaf223c07213a7a0f80e43460d530a6bbcd9e16002"
   solver-name = "gps-cdcl"
   solver-version = 1
