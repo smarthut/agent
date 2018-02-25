@@ -59,6 +59,6 @@ func startPolling() {
 		if err := currentDevice.UpdateSockets(); err != nil {
 			log.Println(err)
 		}
-		<-time.After(pollingTime * time.Second)
+		<-time.After(pollingTime)
 	}
 }

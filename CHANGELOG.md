@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.4.1] - 2018-02-25
+### Fixed
+- Polling time for cron
+
 ## [0.4.0] - 2018-02-24
 ### Changed
 - Switched to kelseyhightower/envconfig env parser
