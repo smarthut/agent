@@ -19,7 +19,7 @@ script:
   - go build .
 
 after_success:
-  - test -n "$TRAVIS_TAG" && docker login -u=$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - test -n "$TRAVIS_TAG" && docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 
 deploy:
   - provider: script
@@ -27,4 +27,5 @@ deploy:
     script: curl -sL http://git.io/goreleaser | bash
     on:
       tags: true
+      go: "1.10.x"
       condition: $TRAVIS_OS_NAME = linux
