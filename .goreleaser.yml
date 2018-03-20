@@ -40,7 +40,6 @@ dockers:
     goarch: amd64
     goarm: ''
     tag_templates:
-      - "{{ .Major }}"
       - "{{ .Major }}.{{ .Minor }}"
       - "{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
       - latest
