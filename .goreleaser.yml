@@ -1,0 +1,46 @@
+builds:
+  - main: main.go
+    binary: agent
+    goarch:
+      - 386
+      - amd64
+    goos:
+      - windows
+      - darwin
+      - linux
+    env:
+      - CGO_ENABLED=0
+checksum:
+  name_template: '{{ .ProjectName }}_checksums.txt'
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - Merge pull request
+      - Merge branch
+archive:
+  replacements:
+    darwin: macOS
+    linux: Linux
+    windows: Windows
+    368: i368
+    amd64: x86_64
+scoop:
+  bucket:
+    owner: smarthut
+    name: scoop-bucket
+  homepage: https://github.com/smarthut/agent
+  description: generic agent for accessing IoT devices
+  license: MIT
+dockers:
+  - image: smarthut/agent
+    goos: linux
+    goarch: amd64
+    goarm: ''
+    tag_templates:
+      - "{{ .Major }}"
+      - "{{ .Major }}.{{ .Minor }}"
+      - "{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
+      - latest

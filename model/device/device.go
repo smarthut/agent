@@ -16,7 +16,6 @@ type Device interface {
 	UpdateSockets() error            // updates all sockets
 	Get(id int) (interface{}, error) // get information from socket
 	Set(id, value int) error         // sends information to socket
-	Len() int                        // get sockets num
 }
 
 // New creates the specified device

@@ -22,7 +22,8 @@ const (
 // Errors
 var (
 	ErrGetStatus    = errors.New("laurent112: unable to get status")
-	ErrOutOfBounds  = errors.New("laurent112: socket out of bounds")
+	ErrOutOfBounds  = "laurent112: socket %d is out of bounds"
+	ErrBadResponse  = "laurent112: request REL,%d,%d was not successful, response: %s"
 	ErrBadNewStatus = errors.New("laurent112: status should be 0 (OFF) or 1 (ON)")
 )
 
@@ -95,7 +96,7 @@ func (d *Laurent112) UpdateSockets() error {
 // Get returns socket#id value
 func (d *Laurent112) Get(id int) (interface{}, error) {
 	if id < 0 || id > len(d.Sockets) {
-		return nil, ErrOutOfBounds
+		return nil, fmt.Errorf(ErrOutOfBounds, id)
 	}
 
 	return d.Sockets[id], nil
@@ -104,11 +105,11 @@ func (d *Laurent112) Get(id int) (interface{}, error) {
 // Set status to socket
 func (d *Laurent112) Set(id, status int) error {
 	if id < 0 || id > len(d.Sockets) {
-		return ErrOutOfBounds
+		return fmt.Errorf(ErrOutOfBounds, id)
 	}
 
 	if status != 0 && status != 1 {
-		return ErrOutOfBounds
+		return fmt.Errorf(ErrOutOfBounds, id)
 	}
 
 	if int(d.Sockets[id]) == status {
@@ -135,7 +136,7 @@ func (d *Laurent112) Set(id, status int) error {
 	}
 
 	if string(body) != "DONE" {
-		return fmt.Errorf("laurent112: request REL,%d,%d was not successful, response: %s", id+1, status, string(body))
+		return fmt.Errorf(ErrBadResponse, id+1, status, string(body))
 	}
 
 	d.UpdateSockets() // force update status, check if new status is wanted
@@ -144,9 +145,4 @@ func (d *Laurent112) Set(id, status int) error {
 	}
 
 	return nil
-}
-
-// Len ...
-func (d *Laurent112) Len() int {
-	return len(d.Sockets)
 }

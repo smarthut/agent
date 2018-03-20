@@ -20,14 +20,8 @@ func APIHandler(w http.ResponseWriter, r *http.Request) {
 func SocketGetHandler(w http.ResponseWriter, r *http.Request) {
 	dev := device.Get()
 	var p device.Payload
-	err := json.NewDecoder(r.Body).Decode(&p)
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&p); err != nil {
 		fmt.Println(err)
-	}
-
-	if p.ID < 0 || p.ID >= dev.Len() {
-		w.Write([]byte("agent: id put of bounds"))
-		return
 	}
 
 	s, err := dev.Get(p.ID)
@@ -47,12 +41,7 @@ func SocketPostHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	if p.ID < 0 || p.ID >= dev.Len() {
-		w.Write([]byte("agent: id put of bounds"))
-		return
-	}
-
-	if err = dev.Set(p.ID, p.Status); err != nil {
+	if err := dev.Set(p.ID, p.Status); err != nil {
 		fmt.Println(err)
 	}
 

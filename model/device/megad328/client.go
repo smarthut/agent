@@ -2,6 +2,7 @@ package megad328
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -14,9 +15,9 @@ const socketsNum = 14
 
 // Errors
 var (
-	ErrGetStatus    = errors.New("laurent112: unable to get status")
-	ErrOutOfBounds  = errors.New("laurent112: socket out of bounds")
-	ErrBadNewStatus = errors.New("laurent112: status should be 0 (OFF) or 1 (ON)")
+	ErrGetStatus    = errors.New("megad328: unable to get status")
+	ErrOutOfBounds  = "megad328: socket %d is out of bounds"
+	ErrBadNewStatus = errors.New("megad328: status should be 0 (OFF) or 1 (ON)")
 )
 
 // MegaD328 contains data for MegaD328 device
@@ -29,7 +30,7 @@ type MegaD328 struct {
 
 type socket interface{}
 
-// New created a new MegaD328 device
+// New creates a new MegaD328 device
 func New(host, password string) *MegaD328 {
 	return &MegaD328{
 		url: url.URL{
@@ -76,7 +77,7 @@ func (d *MegaD328) UpdateSockets() error {
 // Get returns socket#id value
 func (d *MegaD328) Get(id int) (interface{}, error) {
 	if id < 0 || id > len(d.Sockets) {
-		return nil, ErrOutOfBounds
+		return nil, fmt.Errorf(ErrOutOfBounds, id)
 	}
 
 	return d.Sockets[id], nil
@@ -85,9 +86,4 @@ func (d *MegaD328) Get(id int) (interface{}, error) {
 // Set ...
 func (d *MegaD328) Set(id, value int) error {
 	return nil
-}
-
-// Len ...
-func (d *MegaD328) Len() int {
-	return len(d.Sockets)
 }
