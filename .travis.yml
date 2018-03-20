@@ -1,15 +1,9 @@
 language: go
 go:
   - "1.10.x"
-  - master
 
 services:
   - docker
-
-matrix:
-  allow_failures:
-    - go: master
-  fast_finish: true
 
 install:
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
@@ -26,6 +20,9 @@ deploy:
     skip_cleanup: true
     script: curl -sL http://git.io/goreleaser | bash
     on:
+      repo: smarthut/agent
       tags: true
-      go: "1.10.x"
       condition: $TRAVIS_OS_NAME = linux
+
+notifications:
+  email: false
