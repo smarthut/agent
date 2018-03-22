@@ -1,0 +1,26 @@
+version: 1.0.{build}
+platform: x64
+
+build:
+  verbosity: minimal
+
+branches:
+  except:
+    - gh-pages
+
+clone_folder: c:\gopath\src\github\smarthut\agent
+
+environment:
+  GOPATH: c:\gopath
+
+init:
+  - ps: iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
+  - ps: $ErrorActionPreference = 'Continue'
+  - ps: scoop update -q
+  - ps: go version
+
+install:
+  - ps: scoop install dep
+
+build_script:
+  - go test ./...
