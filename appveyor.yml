@@ -1,12 +1,7 @@
 version: 1.0.{build}
 platform: x64
 
-build:
-  verbosity: minimal
-
-branches:
-  except:
-    - gh-pages
+skip_tags: true
 
 cache:
   - '%USERPROFILE\scoop\cache'
@@ -19,7 +14,7 @@ environment:
 init:
   - ps: iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
   - ps: $ErrorActionPreference = 'Continue'
-  - ps: scoop update -q
+  - ps: scoop update --quiet
   - ps: go version
 
 install:
