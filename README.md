@@ -4,7 +4,6 @@
 [![Build Status](https://travis-ci.org/smarthut/agent.svg?branch=master)](https://travis-ci.org/smarthut/agent)
 [![Build status](https://ci.appveyor.com/api/projects/status/6dgv0nwkt9efiglq/branch/master?svg=true)](https://ci.appveyor.com/project/leonidboykov/agent/branch/master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/smarthut/agent)](https://goreportcard.com/report/github.com/smarthut/agent)
-[![Docker Layers](https://images.microbadger.com/badges/image/smarthut/agent.svg)](https://microbadger.com/images/smarthut/agent)
 
 SmartHut Agent is a generic agent for accessing any devices available for the
 SmartHut service.
