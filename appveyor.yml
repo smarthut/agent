@@ -23,7 +23,7 @@ init:
   - ps: go version
 
 install:
-  - ps: scoop install dep
+  - ps: curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
   - ps: dep ensure
 
 build_script:
