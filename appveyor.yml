@@ -4,7 +4,7 @@ platform: x64
 skip_tags: true
 
 cache:
-  - '%USERPROFILE\scoop\cache'
+  - '%USERPROFILE%\scoop\cache'
 
 clone_folder: c:\gopath\src\github\smarthut\agent
 
@@ -19,7 +19,7 @@ init:
 
 install:
   - ps: scoop install dep
-  - ps: dep ensure
+  - ps: dep ensure -v
 
 build_script:
   - go test ./...
