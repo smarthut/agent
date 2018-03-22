@@ -8,6 +8,9 @@ branches:
   except:
     - gh-pages
 
+cache:
+  - '%USERPROFILE\scoop\cache'
+
 clone_folder: c:\gopath\src\github\smarthut\agent
 
 environment:
@@ -21,6 +24,7 @@ init:
 
 install:
   - ps: scoop install dep
+  - ps: dep ensure
 
 build_script:
   - go test ./...
