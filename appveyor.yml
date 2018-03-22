@@ -19,7 +19,7 @@ init:
 
 install:
   - ps: scoop install dep
-  - ps: dep ensure -v
+  - ps: dep ensure
 
 build_script:
   - go test ./...
