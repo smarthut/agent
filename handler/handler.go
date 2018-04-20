@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -20,7 +19,7 @@ func APIHandler(w http.ResponseWriter, r *http.Request) {
 func SocketGetHandler(w http.ResponseWriter, r *http.Request) {
 	dev := device.Get()
 	var p device.Payload
-	if err := json.NewDecoder(r.Body).Decode(&p); err != nil {
+	if err := render.DecodeJSON(r.Body, &p); err != nil {
 		fmt.Println(err)
 	}
 
@@ -36,8 +35,7 @@ func SocketGetHandler(w http.ResponseWriter, r *http.Request) {
 func SocketPostHandler(w http.ResponseWriter, r *http.Request) {
 	dev := device.Get()
 	var p device.Payload
-	err := json.NewDecoder(r.Body).Decode(&p)
-	if err != nil {
+	if err := render.DecodeJSON(r.Body, &p); err != nil {
 		fmt.Println(err)
 	}
 
