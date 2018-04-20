@@ -54,7 +54,7 @@ func New(host string) *Laurent112 {
 type response struct {
 	XMLName xml.Name `xml:"response"`
 	SysTime int      `xml:"systime0"`
-	Rele    string   `xml:"rele_table0"`
+	Relay   string   `xml:"rele_table0"`
 }
 
 // UpdateSockets fetch sockets from Laurent112 and update time
@@ -68,18 +68,10 @@ func (d *Laurent112) UpdateSockets() error {
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return err
-	}
-
 	var r response
-	err = xml.Unmarshal(body, &r)
-	if err != nil {
-		return err
-	}
+	xml.NewDecoder(resp.Body).Decode(&r)
 
-	vals := strings.Split(r.Rele, "")
+	vals := strings.Split(r.Relay, "")
 
 	d.UpdatedAt = time.Now()
 	for i := range d.Sockets {
