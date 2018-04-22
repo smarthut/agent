@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/render"
+
 	"github.com/smarthut/agent/model/device"
 )
 
