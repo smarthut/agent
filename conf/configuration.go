@@ -1,4 +1,4 @@
-package device
+package conf
 
 import "time"
 

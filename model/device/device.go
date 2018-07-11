@@ -2,7 +2,6 @@ package device
 
 import (
 	"fmt"
-	"log"
 	"time"
 )
 
@@ -31,33 +30,4 @@ func New(driver, host, password string) (Device, error) {
 	}
 
 	return dev, nil
-}
-
-// Create creates the device
-func Create(c Configuration) error {
-	var err error
-	currentDevice, err = New(c.Device.Driver, c.Device.Host, c.Device.Password)
-	if err != nil {
-		return err
-	}
-
-	pollingTime = c.Device.PollingTime
-
-	go startPolling()
-
-	return nil
-}
-
-// Get returns the device
-func Get() Device {
-	return currentDevice
-}
-
-func startPolling() {
-	for {
-		if err := currentDevice.UpdateSockets(); err != nil {
-			log.Println(err)
-		}
-		<-time.After(pollingTime)
-	}
 }

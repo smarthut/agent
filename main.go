@@ -3,12 +3,13 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
+	"time"
 
 	"github.com/kelseyhightower/envconfig"
 
+	"github.com/smarthut/agent/api"
+	"github.com/smarthut/agent/conf"
 	"github.com/smarthut/agent/model/device"
-	"github.com/smarthut/agent/router"
 )
 
 var (
@@ -17,18 +18,35 @@ var (
 	date    = "unknown"
 )
 
+var pollingTime time.Duration
+
 func main() {
-	var conf device.Configuration
-	if err := envconfig.Process("agent", &conf); err != nil {
+	var config conf.Configuration
+	if err := envconfig.Process("agent", &config); err != nil {
 		log.Println(err)
 	}
 
-	if err := device.Create(conf); err != nil {
+	pollingTime = config.Device.PollingTime
+
+	device, err := device.New(config.Device.Driver, config.Device.Host, config.Device.Password)
+	if err != nil {
 		log.Println(err)
 	}
 
-	l := fmt.Sprintf("%s:%d", conf.Host, conf.Port)
+	api, err := api.New(device)
 
+	go startPolling(device)
+
+	l := fmt.Sprintf("%s:%d", config.Host, config.Port)
 	log.Printf("Starting SmartHut Agent %s on %s\n", version, l)
-	http.ListenAndServe(l, router.New())
+	api.Start(l)
+}
+
+func startPolling(d device.Device) {
+	for {
+		if err := d.UpdateSockets(); err != nil {
+			log.Println(err)
+		}
+		<-time.After(pollingTime)
+	}
 }
