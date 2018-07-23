@@ -9,7 +9,7 @@ import (
 
 	"github.com/smarthut/agent/api"
 	"github.com/smarthut/agent/conf"
-	"github.com/smarthut/agent/model/device"
+	"github.com/smarthut/agent/device"
 )
 
 var (
@@ -44,7 +44,7 @@ func main() {
 
 func startPolling(d device.Device) {
 	for {
-		if err := d.UpdateSockets(); err != nil {
+		if err := d.Fetch(); err != nil {
 			log.Println(err)
 		}
 		<-time.After(pollingTime)

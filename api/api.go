@@ -7,7 +7,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 
 	"github.com/smarthut/agent/conf"
-	"github.com/smarthut/agent/model/device"
+	"github.com/smarthut/agent/device"
 )
 
 // API is the main REST API
