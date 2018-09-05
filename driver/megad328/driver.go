@@ -74,7 +74,7 @@ func (d *MegaD328) Read(id int) (interface{}, error) {
 	return d.Sockets[id], nil
 }
 
-func (d *MegaD328) Write(id int, status bool) error {
+func (d *MegaD328) Write(id int, status interface{}) error {
 	return nil // not implemented
 }
 

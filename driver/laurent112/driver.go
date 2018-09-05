@@ -80,12 +80,17 @@ func (d *Laurent112) Read(id int) (interface{}, error) {
 	return d.Sockets[id], nil
 }
 
-func (d *Laurent112) Write(id int, status bool) error {
+func (d *Laurent112) Write(id int, status interface{}) error {
+	newStatus, err := boolconv.GetBool(status)
+	if err != nil {
+		return err
+	}
+
 	if id < 0 || id > len(d.Sockets) {
 		return fmt.Errorf(ErrOutOfBounds, id)
 	}
 
-	if (d.Sockets[id]).(bool) == status {
+	if (d.Sockets[id]).(bool) == newStatus {
 		d.Fetch() // force update, skip if status already in desired state
 		return nil
 	}
@@ -93,7 +98,7 @@ func (d *Laurent112) Write(id int, status bool) error {
 	u := d.address
 	u.Path = "cmd.cgi"
 	v := url.Values{}
-	cmd := fmt.Sprintf(cmdTemplate, id+1, boolconv.Btoi(status)) // add 1 to id, Laurent112 starting count from 1
+	cmd := fmt.Sprintf(cmdTemplate, id+1, boolconv.Btoi(newStatus)) // add 1 to id, Laurent112 starting count from 1
 	v.Add("cmd", cmd)
 	u.RawQuery = v.Encode()
 
@@ -109,12 +114,12 @@ func (d *Laurent112) Write(id int, status bool) error {
 	}
 
 	if string(body) != "DONE" {
-		return fmt.Errorf(ErrBadResponse, id+1, status, string(body))
+		return fmt.Errorf(ErrBadResponse, id+1, newStatus, string(body))
 	}
 
 	d.Fetch() // force update status, check if new status is same sa requested
-	if (d.Sockets[id]).(bool) != status {
-		return fmt.Errorf(ErrUnableToChange, id+1, status, d.Sockets[id])
+	if (d.Sockets[id]).(bool) != newStatus {
+		return fmt.Errorf(ErrUnableToChange, id+1, newStatus, d.Sockets[id])
 	}
 
 	return nil

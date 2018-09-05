@@ -10,7 +10,7 @@ import (
 // Device implements abstract device accessor
 type Device interface {
 	Read(id int) (interface{}, error)
-	Write(id int, status bool) error
+	Write(id int, status interface{}) error
 	Ping() (bool, error)
 	Fetch() error
 }
