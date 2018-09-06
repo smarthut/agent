@@ -180,12 +180,3 @@ func parseValue(value string) interface{} {
 
 	return boolconv.Itob(num)
 }
-
-// func (d *Laurent112) polling() {
-// 	for {
-// 		if err := d.Fetch(); err != nil {
-// 			log.Println(err)
-// 		}
-// 		<-time.After(d.pollingTime)
-// 	}
-// }

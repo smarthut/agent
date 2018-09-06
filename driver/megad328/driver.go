@@ -133,12 +133,3 @@ func parseValue(value string) interface{} {
 	// Just return the value if every parsers failed
 	return value
 }
-
-// func (d *MegaD328) polling() {
-// 	for {
-// 		if err := d.Fetch(); err != nil {
-// 			log.Println(err)
-// 		}
-// 		<-time.After(d.pollingTime)
-// 	}
-// }
