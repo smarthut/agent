@@ -174,7 +174,7 @@ func (d *Laurent112) Fetch() error {
 func parseValue(value string) interface{} {
 	num, err := strconv.Atoi(value)
 	// Return the value if it parsed successfully
-	if err == nil {
+	if err != nil {
 		return num
 	}
 
