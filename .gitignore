@@ -1,5 +1,6 @@
 ### Agent ###
 agent
+!agent/
 coverage.txt
 
 ### GoReleaser ###
