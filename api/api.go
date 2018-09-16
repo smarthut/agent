@@ -6,7 +6,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 
-	"github.com/smarthut/agent/conf"
+	"github.com/smarthut/agent"
 	"github.com/smarthut/agent/device"
 )
 
@@ -14,7 +14,7 @@ import (
 type API struct {
 	handler http.Handler
 	device  device.Device
-	config  *conf.Configuration
+	config  *agent.Configuration
 }
 
 // New instantiates a new REST API

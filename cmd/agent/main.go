@@ -7,8 +7,8 @@ import (
 
 	"github.com/kelseyhightower/envconfig"
 
+	"github.com/smarthut/agent"
 	"github.com/smarthut/agent/api"
-	"github.com/smarthut/agent/conf"
 	"github.com/smarthut/agent/device"
 )
 
@@ -19,7 +19,7 @@ var (
 )
 
 func main() {
-	var config conf.Configuration
+	var config agent.Configuration
 	if err := envconfig.Process("agent", &config); err != nil {
 		log.Println(err)
 	}
