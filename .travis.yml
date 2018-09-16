@@ -10,7 +10,7 @@ install:
   - dep ensure
 
 script:
-  - go build .
+  - go build cmd/agent
 
 after_success:
   - test -n "$TRAVIS_TAG" && docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
