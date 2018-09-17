@@ -98,7 +98,8 @@ func (d *Laurent112) Write(id int, status interface{}) error {
 	u := d.address
 	u.Path = "cmd.cgi"
 	v := url.Values{}
-	cmd := fmt.Sprintf(cmdTemplate, id+1, boolconv.Btoi(newStatus)) // add 1 to id, Laurent112 starting count from 1
+	// add 1 to id, Laurent112 starting count from 1
+	cmd := fmt.Sprintf(cmdTemplate, id+1, boolconv.Btoi(newStatus))
 	v.Add("cmd", cmd)
 	u.RawQuery = v.Encode()
 

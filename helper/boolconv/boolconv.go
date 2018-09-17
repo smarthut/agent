@@ -2,6 +2,7 @@ package boolconv
 
 import (
 	"fmt"
+	"strconv"
 )
 
 // Errors
@@ -23,12 +24,14 @@ func Itob(i int) bool {
 }
 
 // GetBool casts interface to a bool value
-func GetBool(v interface{}) (bool, error) {
-	switch v.(type) {
+func GetBool(i interface{}) (bool, error) {
+	switch v := i.(type) {
 	case bool:
-		return v.(bool), nil
+		return v, nil
 	case int:
-		return Itob(v.(int)), nil
+		return Itob(v), nil
+	case string:
+		return strconv.ParseBool(v)
 	}
-	return false, fmt.Errorf(ErrUnableToCastValue, v)
+	return false, fmt.Errorf(ErrUnableToCastValue, i)
 }

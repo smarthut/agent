@@ -7,18 +7,16 @@ import (
 	"github.com/go-chi/chi/middleware"
 
 	"github.com/smarthut/agent"
-	"github.com/smarthut/agent/device"
 )
 
 // API is the main REST API
 type API struct {
 	handler http.Handler
-	device  device.Device
-	config  *agent.Configuration
+	device  agent.Device
 }
 
 // New instantiates a new REST API
-func New(device device.Device) (*API, error) {
+func New(device agent.Device) (*API, error) {
 	api := &API{
 		device: device,
 	}

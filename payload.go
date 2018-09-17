@@ -1,4 +1,4 @@
-package device
+package agent
 
 // Payload holds payload for device
 type Payload struct {

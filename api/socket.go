@@ -6,11 +6,11 @@ import (
 
 	"github.com/go-chi/render"
 
-	"github.com/smarthut/agent/device"
+	"github.com/smarthut/agent"
 )
 
 func (api *API) getSocket(w http.ResponseWriter, r *http.Request) {
-	var p device.Payload
+	var p agent.Payload
 	if err := render.DecodeJSON(r.Body, &p); err != nil {
 		log.Println(err)
 	}
@@ -24,7 +24,7 @@ func (api *API) getSocket(w http.ResponseWriter, r *http.Request) {
 }
 
 func (api *API) postSocket(w http.ResponseWriter, r *http.Request) {
-	var p device.Payload
+	var p agent.Payload
 	if err := render.DecodeJSON(r.Body, &p); err != nil {
 		log.Println(err)
 	}

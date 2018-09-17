@@ -9,7 +9,6 @@ import (
 
 	"github.com/smarthut/agent"
 	"github.com/smarthut/agent/api"
-	"github.com/smarthut/agent/device"
 )
 
 var (
@@ -24,7 +23,7 @@ func main() {
 		log.Println(err)
 	}
 
-	device, err := device.New(config.Device.Driver, config.Device.Host, config.Device.Password)
+	device, err := agent.New(config.Device.Driver, config.Device.Host, config.Device.Password)
 	if err != nil {
 		log.Println(err)
 	}
@@ -38,7 +37,7 @@ func main() {
 	api.Start(l)
 }
 
-func startPolling(d device.Device, t time.Duration) {
+func startPolling(d agent.Device, t time.Duration) {
 	for {
 		if err := d.Fetch(); err != nil {
 			log.Println(err)
