@@ -2,7 +2,7 @@ builds:
   - main: ./cmd/agent
     binary: agent
     goarch:
-      - 386
+      - "386"
       - amd64
     goos:
       - windows
@@ -11,25 +11,25 @@ builds:
     env:
       - CGO_ENABLED=0
 checksum:
-  name_template: '{{ .ProjectName }}_checksums.txt'
+  name_template: "{{ .ProjectName }}_checksums.txt"
 changelog:
   sort: asc
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
-      - '^chore:'
-      - '^repo:'
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+      - "^repo:"
       - typo
       - Merge pull request
       - Merge branch
-archive:
-  replacements:
-    darwin: macOS
-    linux: Linux
-    windows: Windows
-    368: i368
-    amd64: x86_64
+archives:
+  - replacements:
+      darwin: macOS
+      linux: Linux
+      windows: Windows
+      368: i368
+      amd64: x86_64
 scoop:
   bucket:
     owner: smarthut
@@ -38,11 +38,16 @@ scoop:
   description: generic agent for accessing IoT devices
   license: MIT
 dockers:
-  - image: smarthut/agent
-    goos: linux
+  - goos: linux
     goarch: amd64
-    goarm: ''
-    tag_templates:
-      - "{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
-      - "{{ .Major }}.{{ .Minor }}"
-      - latest
+    goarm: ""
+    image_templates:
+      - "smarthut/agent:{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
+      - "smarthut/agent:{{ .Major }}.{{ .Minor }}"
+      - "smarthut/agent:latest"
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.name={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.version={{ .Version }}"

@@ -1,7 +1,7 @@
 package laurent112
 
 import (
-	"encoding/xml"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -38,6 +38,7 @@ const (
 type Laurent112 struct {
 	sync.Mutex // ???
 	address    url.URL
+	password   string
 	client     http.Client
 	Status     string        `json:"status"`
 	UpdatedAt  time.Time     `json:"updated_at"`
@@ -46,8 +47,9 @@ type Laurent112 struct {
 }
 
 // New creates a new Laurent112 device
-func New(host string) *Laurent112 {
+func New(host, password string) *Laurent112 {
 	return &Laurent112{
+		password: password,
 		address: url.URL{
 			Scheme: "http",
 			Host:   host,
@@ -101,6 +103,7 @@ func (d *Laurent112) Write(id int, status interface{}) error {
 	// add 1 to id, Laurent112 starting count from 1
 	cmd := fmt.Sprintf(cmdTemplate, id+1, boolconv.Btoi(newStatus))
 	v.Add("cmd", cmd)
+	v.Add("psw", d.password)
 	u.RawQuery = v.Encode()
 
 	resp, err := d.client.Get(u.String())
@@ -128,9 +131,12 @@ func (d *Laurent112) Write(id int, status interface{}) error {
 
 // Response of Laurent112
 type response struct {
-	XMLName xml.Name `xml:"response"`
-	SysTime int      `xml:"systime0"`
-	Relay   string   `xml:"rele_table0"`
+	Relay       string `json:"rele"`
+	SysTime     string `json:"sys_time"`
+	RolTime     string `json:"rol_rime"`
+	MAC         string `json:"mac"`
+	Firmware    string `json:"fw"`
+	SeriaNumber string `json:"sn"`
 }
 
 // Fetch fetches data from the remote device
@@ -141,6 +147,9 @@ func (d *Laurent112) Fetch() error {
 	}
 
 	u := d.address
+	v := url.Values{}
+	v.Add("psw", d.password)
+	u.RawQuery = v.Encode()
 	u.Path = "status.xml"
 
 	resp, err := d.client.Get(u.String())
@@ -154,7 +163,7 @@ func (d *Laurent112) Fetch() error {
 	d.UpdatedAt = time.Now()
 
 	var r response
-	if err := xml.NewDecoder(resp.Body).Decode(&r); err != nil {
+	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
 		d.Status = StatusOffline
 		d.Error = err
 		return err

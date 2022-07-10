@@ -38,7 +38,7 @@ func newMegaD328Device(host, password string) (Device, error) {
 }
 
 func newLaurent112Device(host, password string) (Device, error) {
-	return laurent112.New(host), nil
+	return laurent112.New(host, password), nil
 }
 
 // Drivers ...
