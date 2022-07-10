@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -112,14 +113,12 @@ func (d *Laurent112) Write(id int, status interface{}) error {
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return err
 	}
 
-	if string(body) != "DONE" {
-		return fmt.Errorf(ErrBadResponse, id+1, newStatus, string(body))
-	}
+	log.Println("cmd", cmd, "resp", string(body))
 
 	d.Fetch() // force update status, check if new status is same sa requested
 	if (d.Sockets[id]).(bool) != newStatus {

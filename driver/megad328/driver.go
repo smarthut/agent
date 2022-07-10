@@ -2,7 +2,7 @@ package megad328
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -93,7 +93,7 @@ func (d *MegaD328) Fetch() error {
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		d.Status = StatusOffline
 		d.Error = err
