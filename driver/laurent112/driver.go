@@ -150,7 +150,7 @@ func (d *Laurent112) Fetch() error {
 	v := url.Values{}
 	v.Add("psw", d.password)
 	u.RawQuery = v.Encode()
-	u.Path = "status.xml"
+	u.Path = "json_sensor.cgi"
 
 	resp, err := d.client.Get(u.String())
 	if err != nil {
